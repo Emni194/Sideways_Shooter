@@ -12,7 +12,7 @@ from time import sleep
 import sound_effects as se
 from button import Button
 from scoreboard import Scoreboard
-
+from explosion import Explosion
 
 class SidewaysShooter:
     """New class to define new game"""
@@ -25,6 +25,7 @@ class SidewaysShooter:
         self.stats = GameStats(self)
         self.sb = Scoreboard(self)
         self.ship = Ship(self)
+        self.explosion = Explosion(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
@@ -58,6 +59,8 @@ class SidewaysShooter:
             self.bullets.empty()
             self._create_fleet()
             self.ship.center_ship()
+            se.explosion_sound.play()
+            self.explosion.blitme()
             sleep(0.5)
         else:
             self.stats.game_active = False
@@ -65,7 +68,6 @@ class SidewaysShooter:
     def _update_aliens(self):
         self.aliens.update()
         self._check_fleet_edges()
-
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             self._ship_hit()
             self._check_aliens_bottom()
@@ -178,6 +180,7 @@ class SidewaysShooter:
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
             self.sb.check_high_score()
+            se.alien_sound.play()
 
     def _start_new_level(self):
         self._create_fleet()

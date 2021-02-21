@@ -20,6 +20,7 @@ class Ship(Sprite):
         self.moving_up = False
         self.moving_down = False
 
+
     def update(self):
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += self.settings.ship_speed
@@ -37,5 +38,5 @@ class Ship(Sprite):
         self.screen.blit(self.image, self.rect)
 
     def center_ship(self):
-        self.rect.bottomright= self.screen_rect.bottomright
+        self.rect.bottomright = self.screen_rect.bottomright
         self.x = float(self.rect.x)
