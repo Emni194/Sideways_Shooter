@@ -143,11 +143,9 @@ class SidewaysShooter:
             self.settings.initialize_dynamic_settings()
             self.stats.reset_stats()
             self.stats.game_active = True
-            self.sb.prep_score()
-            self.sb.prep_level()
+            self.sb.prep_images()
             self.aliens.empty()
             self.bullets.empty()
-            self.sb.prep_ships()
             self._create_fleet()
             self.ship.center_ship()
             pygame.mouse.set_visible(False)
@@ -174,16 +172,21 @@ class SidewaysShooter:
     def _check_bullet_alien_collisions(self):
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
         if not self.aliens:
-            self._create_fleet()
-            self.bullets.empty()
-            self.settings.increase_speed()
-            self.stats.level +=1
-            self.sb.prep_level()
+            self._start_new_level()
         if collisions:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
             self.sb.check_high_score()
+
+    def _start_new_level(self):
+        self._create_fleet()
+        self.bullets.empty()
+        self.settings.increase_speed()
+        self.stats.level += 1
+        self.sb.prep_level()
+
+
 
     def _check_aliens_bottom(self):
         screen_rect = self.screen.get_rect()
